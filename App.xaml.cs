@@ -1,4 +1,7 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using BookmarkManager.Models;
+using BookmarkManager.ViewModel;
+using BookmarkManager.Views;
+using Microsoft.Extensions.DependencyInjection;
 using System.Windows;
 
 namespace BookmarkManager;
@@ -13,6 +16,13 @@ public partial class App : Application {
 
     private IServiceCollection ConfigureServices(IServiceCollection services) {
         services.AddSingleton<MainWindow, MainWindow>();
+        services.AddSingleton<MainViewModel, MainViewModel>();
+
+        services.AddScoped<IBookmarkManager, Models.BookmarkManager>();
+
+        services.AddScoped<NewBookmarkWindow, NewBookmarkWindow>();
+        services.AddScoped<NewBookmarkViewModel, NewBookmarkViewModel>();        
+
         return services;
     }
 
