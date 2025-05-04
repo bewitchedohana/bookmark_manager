@@ -32,7 +32,7 @@
                         Margin="0 0 5 0" Cursor="Hand" Command="{Binding CloseWindow_Command}" 
                         CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type Window}}}" />
                 <Button Grid.Column="4" Content="Save" Background="LightBlue" 
-                        Cursor="Hand" Command="{Binding CreateBookmark_Command}"  />
+                        Cursor="Hand" Command="{Binding CreateBookmark_Command}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}"  />
             </Grid>
         </StackPanel>       
     </Border>

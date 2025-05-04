@@ -45,6 +45,7 @@ public sealed class NewBookmarkViewModel : INotifyPropertyChanged {
     private void CreateBookmark(object? obj) {
         Bookmark bookmark = new(Url, Name);
         _bookmarkManager.Create(bookmark);
+        CloseWindow(obj);
     }
 
     private bool CanCreateBookmark(object? obj) {

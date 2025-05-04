@@ -32,6 +32,17 @@
 
             <Button Content="Add" Grid.Column="5" Grid.Row="0" CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}" 
                     Command="{Binding OpenNewBookmarkWindow_Command}" />
+
+            <ListView x:Name="BookmarksListView" ItemsSource="{Binding Bookmarks}" Grid.Row="2" Grid.ColumnSpan="6" Grid.RowSpan="7">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel>
+                            <TextBlock x:Name="BookmarkName" Text="{Binding Name}" />
+                            <TextBlock x:Name="BookmarkUrl" Text="{Binding Url}" />
+                        </StackPanel>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
         </Grid>
     </Border>
 </Window>
