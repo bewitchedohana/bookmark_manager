@@ -63,9 +63,11 @@ public sealed class NewBookmarkViewModel : INotifyPropertyChanged {
     }
 
     private void CloseWindow(object? obj) {
-        NewBookmarkWindow? newBookmarkWindow = obj as NewBookmarkWindow;
-        ArgumentNullException.ThrowIfNull(newBookmarkWindow, nameof(obj));
-        newBookmarkWindow.Visibility = System.Windows.Visibility.Hidden;
+        if (obj is not null) {
+            NewBookmarkWindow? newBookmarkWindow = obj as NewBookmarkWindow;
+            ArgumentNullException.ThrowIfNull(newBookmarkWindow, nameof(obj));
+            newBookmarkWindow.Visibility = System.Windows.Visibility.Hidden;
+        }
     }
 
     private bool CanCloseWindow(object? obj) => true;

@@ -21,7 +21,10 @@ public partial class App : Application {
         services.AddScoped<IBookmarkManager, Models.BookmarkManager>();
 
         services.AddScoped<NewBookmarkWindow, NewBookmarkWindow>();
-        services.AddScoped<NewBookmarkViewModel, NewBookmarkViewModel>();        
+        services.AddScoped<NewBookmarkViewModel, NewBookmarkViewModel>();       
+        
+        services.AddScoped<UpdateBookmarkViewModel, UpdateBookmarkViewModel>();
+        services.AddScoped<UpdateBookmarkWindow, UpdateBookmarkWindow>();
 
         return services;
     }

@@ -30,4 +30,10 @@ internal sealed class BookmarkManager : IBookmarkManager {
         connection.CreateTable<Bookmark>();
         return [.. connection.Table<Bookmark>()];
     }
+
+    public void Update(Bookmark bookmark) {
+        using SQLiteConnection connection = new(DatabasePath);
+        connection.CreateTable<Bookmark>();
+        connection.Update(bookmark);
+    }
 }
