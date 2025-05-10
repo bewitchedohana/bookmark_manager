@@ -1,6 +1,9 @@
-﻿namespace BookmarkManager.Models;
+﻿using System.ComponentModel;
+using System.Runtime.CompilerServices;
 
-public sealed class Bookmark : BaseModel {
+namespace BookmarkManager.Models;
+
+public sealed class Bookmark : BaseModel, INotifyPropertyChanged {
 	private string _url = string.Empty;
 
 	public string Url {
@@ -8,18 +11,22 @@ public sealed class Bookmark : BaseModel {
 		set {
             ArgumentException.ThrowIfNullOrWhiteSpace(value, nameof(value));
 			_url = value;
+			NotifyPropertyChanged();
 		}
 	}
 
-	private string _name = string.Empty;
+	private string _name = string.Empty;    
 
-	public string Name {
+    public string Name {
 		get => _name;
 		set {
 			ArgumentException.ThrowIfNullOrWhiteSpace(value, nameof(value));
-			_name = value; 
-		}
+			_name = value;
+            NotifyPropertyChanged();
+        }
 	}
+
+    public event PropertyChangedEventHandler? PropertyChanged;
 
     public Bookmark() : base() { }
 
@@ -30,4 +37,7 @@ public sealed class Bookmark : BaseModel {
     public Bookmark(string url, string name) : this(url) {
         Name = name;
     }
+
+	private void NotifyPropertyChanged([CallerMemberName] String propertyName = "") 
+		=> PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 }

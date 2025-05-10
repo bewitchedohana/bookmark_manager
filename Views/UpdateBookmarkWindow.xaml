@@ -1,0 +1,40 @@
+﻿<Window x:Class="BookmarkManager.Views.UpdateBookmarkWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:BookmarkManager.Views"
+        xmlns:vm="clr-namespace:BookmarkManager.ViewModel"
+        mc:Ignorable="d"
+        Title="Window1" Height="220" Width="350">    
+    <Border Padding="10">
+        <StackPanel>
+            <Label Content="Name" Target="{Binding ElementName=NameTextBox}" MinHeight="24" />
+            <TextBox BorderThickness="1" x:Name="NameTextBox"  MinHeight="24" Text="{Binding SelectedBookmark.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+
+            <Label Content="URL" Target="{Binding ElementName=URLTextBox}" />
+            <TextBox BorderThickness="1" x:Name="URLTextBox"  MinHeight="24" Text="{Binding SelectedBookmark.Url, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+
+            <Grid Margin="0 10 0 0">
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+
+                <Button Grid.Column="3" Content="Cancel" Background="Red" Foreground="White" BorderThickness="1" 
+                    Margin="0 0 5 0" Cursor="Hand" Command="{Binding CloseWindow_Command}" 
+                    CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type Window}}}" />
+                <Button Grid.Column="4" Content="Save" Background="LightBlue" 
+                    Cursor="Hand" Command="{Binding UpdateBookmark_Command}"
+                    CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}"/>
+            </Grid>
+        </StackPanel>
+    </Border>
+</Window>
