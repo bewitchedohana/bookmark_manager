@@ -25,12 +25,15 @@ public sealed class MainViewModel : INotifyPropertyChanged {
             _selectedBookmark = value;
             NotifyPropertyChanged();
             (OpenUpdateBookmarkWindow_Command as RelayCommand)!.RaiseCanExecuteChanged();
+            (DeleteBookmark_Command as RelayCommand)!.RaiseCanExecuteChanged();
         }
     }
 
     public ICommand OpenNewBookmarkWindow_Command { get; private set; }
 
     public ICommand OpenUpdateBookmarkWindow_Command { get; private set; }
+
+    public ICommand DeleteBookmark_Command { get; private set; }
 
     public ObservableCollection<Bookmark> Bookmarks { get; private set; } = [];
 
@@ -46,9 +49,26 @@ public sealed class MainViewModel : INotifyPropertyChanged {
 
         OpenNewBookmarkWindow_Command = new RelayCommand(CanOpenNewWindow, OpenNewWindow);
         OpenUpdateBookmarkWindow_Command = new RelayCommand(CanOpenUpdateWindow, OpenUpdateWindow);
+        DeleteBookmark_Command = new RelayCommand(CanDeleteBookmark, DeleteBookmark);
 
         LoadItems();
     }
+
+    private void DeleteBookmark(object? obj) {
+        ArgumentNullException.ThrowIfNull(SelectedBookmark, nameof(SelectedBookmark));
+        MessageBoxResult response = MessageBox.Show(
+            "Are you sure you want to delete this bookmark?",
+            "Delete bookmark?",
+            MessageBoxButton.YesNo,
+            MessageBoxImage.Warning);
+
+        if (response.Equals(MessageBoxResult.Yes)) { 
+            _bookmarkManager.Delete(SelectedBookmark);
+            LoadItems();
+        }
+    }
+
+    private bool CanDeleteBookmark(object? obj) => SelectedBookmark is not null;
 
     private bool CanOpenUpdateWindow(object? obj) => SelectedBookmark is not null;
 
@@ -58,7 +78,7 @@ public sealed class MainViewModel : INotifyPropertyChanged {
 
         _updateBookmarkWindow.Owner = mainWindow;
         _updateBookmarkWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
-        // TODO: Make window non closable
+        _updateBookmarkWindow.WindowStyle = WindowStyle.None;
         _updateBookmarkWindow.ShowDialog();
 
         LoadItems();

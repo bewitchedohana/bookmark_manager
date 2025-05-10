@@ -25,6 +25,12 @@ internal sealed class BookmarkManager : IBookmarkManager {
         connection.Insert(bookmark);
     }
 
+    public void Delete(Bookmark bookmark) {
+        using SQLiteConnection connection = new(DatabasePath);
+        connection.CreateTable<Bookmark>();
+        connection.Delete(bookmark);
+    }
+
     public List<Bookmark> GetBookmarks() {
         using SQLiteConnection connection = new(DatabasePath);
         connection.CreateTable<Bookmark>();

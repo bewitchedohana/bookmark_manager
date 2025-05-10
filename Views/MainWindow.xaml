@@ -30,7 +30,10 @@
                 <ColumnDefinition />
                 <ColumnDefinition />
             </Grid.ColumnDefinitions>
-            
+
+            <Button Content="Delete" Grid.Column="3" Margin="5 0 5 0" Background="Red" Foreground="White"
+                    Command="{Binding DeleteBookmark_Command}" />
+
             <Button Content="Update" Grid.Column="4" Margin="5 0 5 0" Background="BlueViolet" Foreground="White" 
                     Command="{Binding OpenUpdateBookmarkWindow_Command}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}" />
 
