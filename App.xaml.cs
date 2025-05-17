@@ -1,4 +1,5 @@
-﻿using BookmarkManager.Models;
+﻿using BookmarkManager.Persistence.Contexts;
+using BookmarkManager.Persistence.Repositories;
 using BookmarkManager.ViewModel;
 using BookmarkManager.Views;
 using Microsoft.Extensions.DependencyInjection;
@@ -7,6 +8,7 @@ using System.Windows;
 namespace BookmarkManager;
 
 public partial class App : Application {
+    public const string ApplicationName = "BookmarkManager";
     private readonly IServiceProvider _serviceProvider;
 
     public App() {
@@ -15,12 +17,13 @@ public partial class App : Application {
     }
 
     private IServiceCollection ConfigureServices(IServiceCollection services) {
+        services.AddDbContext<ApplicationContext>();
         services.AddScoped<IWindowActivator, WindowActivator>();
 
         services.AddSingleton<MainWindow, MainWindow>();
         services.AddSingleton<MainViewModel, MainViewModel>();
 
-        services.AddSingleton<IBookmarkManager, Models.BookmarkManager>();
+        services.AddSingleton<IBookmarkRepository, BookmarkRepository>();
 
         services.AddSingleton<NewBookmarkWindow, NewBookmarkWindow>();
         services.AddSingleton<NewBookmarkViewModel, NewBookmarkViewModel>();       

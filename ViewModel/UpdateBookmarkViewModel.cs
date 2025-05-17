@@ -1,5 +1,6 @@
 ﻿using BookmarkManager.Commands;
 using BookmarkManager.Models;
+using BookmarkManager.Persistence.Repositories;
 using BookmarkManager.Views;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
@@ -9,7 +10,7 @@ using System.Windows.Input;
 namespace BookmarkManager.ViewModel;
 
 public sealed class UpdateBookmarkViewModel : INotifyPropertyChanged {
-    private readonly IBookmarkManager _bookmarkManager;
+    private readonly IBookmarkRepository _bookmarkRepository;
 	private Bookmark? _selectedBookmark;
 
 	public  Bookmark? SelectedBookmark {
@@ -25,8 +26,8 @@ public sealed class UpdateBookmarkViewModel : INotifyPropertyChanged {
     public ICommand CloseWindow_Command { get; private set; }
     public ICommand UpdateBookmark_Command { get; private set; }
 
-    public UpdateBookmarkViewModel(IBookmarkManager bookmarkManager) {
-        _bookmarkManager = bookmarkManager;
+    public UpdateBookmarkViewModel(IBookmarkRepository bookmarkRepository) {
+        _bookmarkRepository = bookmarkRepository;
 
 		CloseWindow_Command = new RelayCommand(CanCloseWindow, CloseWindow);
         UpdateBookmark_Command = new RelayCommand(CanUpdateBookmark, UpdateBookmark);
@@ -37,7 +38,7 @@ public sealed class UpdateBookmarkViewModel : INotifyPropertyChanged {
 
     private void UpdateBookmark(object? obj) {
         ArgumentNullException.ThrowIfNull(SelectedBookmark, nameof(SelectedBookmark));
-        _bookmarkManager.Update(SelectedBookmark);
+        _bookmarkRepository.UpdateBookmark(SelectedBookmark);
 
         if (obj is not null) {
             UpdateBookmarkWindow? window = obj as UpdateBookmarkWindow;

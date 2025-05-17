@@ -1,5 +1,6 @@
 ﻿using BookmarkManager.Commands;
 using BookmarkManager.Models;
+using BookmarkManager.Persistence.Repositories;
 using BookmarkManager.Views;
 using System.ComponentModel;
 using System.Windows.Input;
@@ -7,7 +8,7 @@ using System.Windows.Input;
 namespace BookmarkManager.ViewModel;
 
 public sealed class NewBookmarkViewModel : INotifyPropertyChanged {
-    private readonly IBookmarkManager _bookmarkManager;
+    private readonly IBookmarkRepository _bookmarkRepository;
 
     private string _name = string.Empty;
 
@@ -35,8 +36,8 @@ public sealed class NewBookmarkViewModel : INotifyPropertyChanged {
 
     public ICommand CreateBookmark_Command { get; private set; }
     
-    public NewBookmarkViewModel(IBookmarkManager bookmarkManager) {
-        _bookmarkManager = bookmarkManager;
+    public NewBookmarkViewModel(IBookmarkRepository bookmarkRepository) {
+        _bookmarkRepository = bookmarkRepository;
 
         CloseWindow_Command = new RelayCommand(CanCloseWindow, CloseWindow);
         CreateBookmark_Command = new RelayCommand(CanCreateBookmark, CreateBookmark);
@@ -44,7 +45,7 @@ public sealed class NewBookmarkViewModel : INotifyPropertyChanged {
 
     private void CreateBookmark(object? obj) {
         Bookmark bookmark = new(Url, Name);
-        _bookmarkManager.Create(bookmark);
+        _bookmarkRepository.AddBookmark(bookmark);
         CloseWindow(obj);
     }
 

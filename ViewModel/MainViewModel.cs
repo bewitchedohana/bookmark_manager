@@ -1,5 +1,6 @@
 ﻿using BookmarkManager.Commands;
 using BookmarkManager.Models;
+using BookmarkManager.Persistence.Repositories;
 using BookmarkManager.Views;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -11,8 +12,8 @@ namespace BookmarkManager.ViewModel;
 
 public sealed class MainViewModel : INotifyPropertyChanged {
     private readonly UpdateBookmarkViewModel _updateBookmarkViewModel;
-    private readonly IBookmarkManager _bookmarkManager;
     private readonly IWindowActivator _windowActivator;
+    private readonly IBookmarkRepository _bookmarkRepository;
 
     public event PropertyChangedEventHandler? PropertyChanged;
 
@@ -34,21 +35,19 @@ public sealed class MainViewModel : INotifyPropertyChanged {
 
     public ICommand DeleteBookmark_Command { get; private set; }
 
-    public ObservableCollection<Bookmark> Bookmarks { get; private set; } = [];
+    public ObservableCollection<Bookmark> Bookmarks => _bookmarkRepository.Bookmarks;
 
     public MainViewModel(
         IWindowActivator windowActivator,
-        IBookmarkManager bookmarkManager,
+        IBookmarkRepository bookmarkRepository,
         UpdateBookmarkViewModel updateBookmarkViewModel) {
         _windowActivator = windowActivator;
-        _bookmarkManager = bookmarkManager;
+        _bookmarkRepository = bookmarkRepository;
         _updateBookmarkViewModel = updateBookmarkViewModel;
 
         OpenNewBookmarkWindow_Command = new RelayCommand(CanOpenNewWindow, OpenNewWindow);
         OpenUpdateBookmarkWindow_Command = new RelayCommand(CanOpenUpdateWindow, OpenUpdateWindow);
         DeleteBookmark_Command = new RelayCommand(CanDeleteBookmark, DeleteBookmark);
-
-        LoadItems();
     }
 
     private void DeleteBookmark(object? obj) {
@@ -60,8 +59,7 @@ public sealed class MainViewModel : INotifyPropertyChanged {
             MessageBoxImage.Warning);
 
         if (response.Equals(MessageBoxResult.Yes)) { 
-            _bookmarkManager.Delete(SelectedBookmark);
-            LoadItems();
+            _bookmarkRepository.DeleteBookmark(SelectedBookmark);
         }
     }
 
@@ -78,8 +76,6 @@ public sealed class MainViewModel : INotifyPropertyChanged {
         updateBookmarkWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
         updateBookmarkWindow.WindowStyle = WindowStyle.None;
         updateBookmarkWindow.ShowDialog();
-
-        LoadItems();
     }
 
     private void NotifyPropertyChanged([CallerMemberName] String propertyName = "")
@@ -91,16 +87,7 @@ public sealed class MainViewModel : INotifyPropertyChanged {
         newBookmarkWindow.Owner = mainWindow;
         newBookmarkWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
         newBookmarkWindow.ShowDialog();
-        LoadItems();
     }
 
     private bool CanOpenNewWindow(object? obj) => true;
-
-    private void LoadItems() {
-        Bookmarks.Clear();
-        List<Bookmark> bookmarks = _bookmarkManager.GetBookmarks();
-        foreach(Bookmark bookmark in bookmarks) {
-            Bookmarks.Add(bookmark);
-        }
-    }
 }
