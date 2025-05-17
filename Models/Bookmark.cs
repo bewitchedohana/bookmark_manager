@@ -3,7 +3,7 @@ using System.Runtime.CompilerServices;
 
 namespace BookmarkManager.Models;
 
-public sealed class Bookmark : BaseModel, INotifyPropertyChanged {
+public class Bookmark : BaseModel, INotifyPropertyChanged {
 	private string _url = string.Empty;
 
 	public string Url {
