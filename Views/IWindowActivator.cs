@@ -1,5 +1,5 @@
-﻿namespace BookmarkManager.Views {
-    internal interface IWindowActivator {
-        T Activate<T>();
-    }
+﻿namespace BookmarkManager.Views;
+
+public interface IWindowActivator {
+    T Activate<T>();
 }
