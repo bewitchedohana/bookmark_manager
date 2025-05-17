@@ -10,10 +10,9 @@ using System.Windows.Input;
 namespace BookmarkManager.ViewModel;
 
 public sealed class MainViewModel : INotifyPropertyChanged {
-    private readonly UpdateBookmarkWindow _updateBookmarkWindow;
     private readonly UpdateBookmarkViewModel _updateBookmarkViewModel;
-    private readonly NewBookmarkWindow _newBookmarWindow;
     private readonly IBookmarkManager _bookmarkManager;
+    private readonly IWindowActivator _windowActivator;
 
     public event PropertyChangedEventHandler? PropertyChanged;
 
@@ -38,13 +37,11 @@ public sealed class MainViewModel : INotifyPropertyChanged {
     public ObservableCollection<Bookmark> Bookmarks { get; private set; } = [];
 
     public MainViewModel(
-        NewBookmarkWindow newBookmarkWindow,
+        IWindowActivator windowActivator,
         IBookmarkManager bookmarkManager,
-        UpdateBookmarkWindow updateBookmarkWindow,
         UpdateBookmarkViewModel updateBookmarkViewModel) {
-        _newBookmarWindow = newBookmarkWindow;
+        _windowActivator = windowActivator;
         _bookmarkManager = bookmarkManager;
-        _updateBookmarkWindow = updateBookmarkWindow;
         _updateBookmarkViewModel = updateBookmarkViewModel;
 
         OpenNewBookmarkWindow_Command = new RelayCommand(CanOpenNewWindow, OpenNewWindow);
@@ -76,10 +73,11 @@ public sealed class MainViewModel : INotifyPropertyChanged {
         MainWindow? mainWindow = obj as MainWindow;
         _updateBookmarkViewModel.SelectedBookmark = SelectedBookmark;
 
-        _updateBookmarkWindow.Owner = mainWindow;
-        _updateBookmarkWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
-        _updateBookmarkWindow.WindowStyle = WindowStyle.None;
-        _updateBookmarkWindow.ShowDialog();
+        UpdateBookmarkWindow updateBookmarkWindow = _windowActivator.Activate<UpdateBookmarkWindow>();
+        updateBookmarkWindow.Owner = mainWindow;
+        updateBookmarkWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+        updateBookmarkWindow.WindowStyle = WindowStyle.None;
+        updateBookmarkWindow.ShowDialog();
 
         LoadItems();
     }
@@ -89,9 +87,10 @@ public sealed class MainViewModel : INotifyPropertyChanged {
 
     private void OpenNewWindow(object? obj) {
         MainWindow? mainWindow = obj as MainWindow;
-        _newBookmarWindow.Owner = mainWindow;
-        _newBookmarWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
-        _newBookmarWindow.ShowDialog();
+        NewBookmarkWindow newBookmarkWindow = _windowActivator.Activate<NewBookmarkWindow>();
+        newBookmarkWindow.Owner = mainWindow;
+        newBookmarkWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+        newBookmarkWindow.ShowDialog();
         LoadItems();
     }
 

@@ -15,21 +15,25 @@ public partial class App : Application {
     }
 
     private IServiceCollection ConfigureServices(IServiceCollection services) {
+        services.AddScoped<IWindowActivator, WindowActivator>();
+
         services.AddSingleton<MainWindow, MainWindow>();
         services.AddSingleton<MainViewModel, MainViewModel>();
 
-        services.AddScoped<IBookmarkManager, Models.BookmarkManager>();
+        services.AddSingleton<IBookmarkManager, Models.BookmarkManager>();
 
-        services.AddScoped<NewBookmarkWindow, NewBookmarkWindow>();
-        services.AddScoped<NewBookmarkViewModel, NewBookmarkViewModel>();       
+        services.AddSingleton<NewBookmarkWindow, NewBookmarkWindow>();
+        services.AddSingleton<NewBookmarkViewModel, NewBookmarkViewModel>();       
         
-        services.AddScoped<UpdateBookmarkViewModel, UpdateBookmarkViewModel>();
-        services.AddScoped<UpdateBookmarkWindow, UpdateBookmarkWindow>();
+        services.AddSingleton<UpdateBookmarkViewModel, UpdateBookmarkViewModel>();
+        services.AddSingleton<UpdateBookmarkWindow, UpdateBookmarkWindow>();
 
         return services;
     }
 
     private void Application_Startup(object sender, StartupEventArgs e) {
-        _serviceProvider.GetRequiredService<MainWindow>().Show();
+        IWindowActivator windowActivator = _serviceProvider.GetRequiredService<IWindowActivator>();
+        MainWindow mainWindow = windowActivator.Activate<MainWindow>();
+        mainWindow.Show();
     }
 }
