@@ -26,7 +26,7 @@ public partial class App : Application {
         services.AddSingleton<IBookmarkRepository, BookmarkRepository>();
 
         services.AddSingleton<NewBookmarkWindow, NewBookmarkWindow>();
-        services.AddSingleton<NewBookmarkViewModel, NewBookmarkViewModel>();       
+        services.AddScoped<NewBookmarkViewModel, NewBookmarkViewModel>();       
         
         services.AddSingleton<UpdateBookmarkViewModel, UpdateBookmarkViewModel>();
         services.AddSingleton<UpdateBookmarkWindow, UpdateBookmarkWindow>();
