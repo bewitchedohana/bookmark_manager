@@ -4,6 +4,7 @@ using BookmarkManager.Persistence.Repositories;
 using BookmarkManager.Views;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Input;
@@ -35,6 +36,8 @@ public sealed class MainViewModel : INotifyPropertyChanged {
 
     public ICommand DeleteBookmark_Command { get; private set; }
 
+    public ICommand OpenURL_Command { get; private set; }
+
     public ObservableCollection<Bookmark> Bookmarks => _bookmarkRepository.Bookmarks;
 
     public MainViewModel(
@@ -48,7 +51,18 @@ public sealed class MainViewModel : INotifyPropertyChanged {
         OpenNewBookmarkWindow_Command = new RelayCommand(CanOpenNewWindow, OpenNewWindow);
         OpenUpdateBookmarkWindow_Command = new RelayCommand(CanOpenUpdateWindow, OpenUpdateWindow);
         DeleteBookmark_Command = new RelayCommand(CanDeleteBookmark, DeleteBookmark);
+        OpenURL_Command = new RelayCommand(CanOpenURL, OpenURL);
     }
+
+    private void OpenURL(object? obj) {
+        ProcessStartInfo processInfo = new ProcessStartInfo(SelectedBookmark!.Url) {
+             UseShellExecute = true
+        };
+
+        Process.Start(processInfo);
+    }
+
+    private bool CanOpenURL(object? obj) => SelectedBookmark is not null;
 
     private void DeleteBookmark(object? obj) {
         ArgumentNullException.ThrowIfNull(SelectedBookmark, nameof(SelectedBookmark));

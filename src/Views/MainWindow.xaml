@@ -44,7 +44,7 @@
                       SelectedItem="{Binding SelectedBookmark, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                 <ListView.ItemTemplate>
                     <DataTemplate>
-                        <StackPanel>
+                        <StackPanel MouseDown="StackPanel_MouseDown">
                             <TextBlock x:Name="BookmarkName" Text="{Binding Name}" />
                             <TextBlock x:Name="BookmarkUrl" Text="{Binding Url}" />
                         </StackPanel>
